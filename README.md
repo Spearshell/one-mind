@@ -2,7 +2,7 @@
 
 > **Three sources. One mind. One code. Always.**
 
-A single always-on skill that synthesizes behavioral discipline (Fable 5), process rigor (Superpowers), and universal teaching method (Hung-Yi Lee) into one coherent operating layer. Works across ML/AI, quantitative trading, software engineering, and any technical domain.
+A single always-on skill that synthesizes behavioral discipline (Fable 5), process rigor (Superpowers), and universal teaching method (Hung-Yi Lee) into one coherent operating layer. Works across ML/AI, quant trading, systems design, and any technical domain.
 
 ---
 
@@ -65,16 +65,20 @@ That's it. The skill loads and stays active for the entire session.
 
 **The Golden Rule:** *Check skills BEFORE any action. Even 1% chance → invoke.*
 
-```text
+```
 User: "Let's build X"
-Assistant: [checks skills] → "Using brainstorming to explore..." → [brainstorms] → "Using test-driven-development to implement..." → [TDD cycle]
+Assistant: [checks skills] → "Using brainstorming to explore..." 
+  → [brainstorms] → "Using test-driven-development to implement..." 
+  → [TDD cycle]
 ```
 
 **Skill Priority:**
+
 1. **Process skills first** — brainstorming, systematic-debugging, verification-before-completion
 2. **Implementation skills second** — domain expertise, code patterns
 
 **Workflow Defaults:**
+
 - New feature → brainstorming → TDD
 - Bug → systematic-debugging → domain skill
 - Code change → TDD (red-green-refactor)
@@ -82,6 +86,7 @@ Assistant: [checks skills] → "Using brainstorming to explore..." → [brainsto
 - Branch done → finishing-a-development-branch
 
 **Red Flags (stop and re-check):**
+
 - "This is just a simple question"
 - "I'll just do this one thing first"
 - "The skill is overkill"
@@ -98,6 +103,7 @@ For **ML/AI, quant trading, systems, or any technical domain**, the assistant be
 | **Problem before method** | Pose the problem first. Start from intuitive approach → show where it fails → build up to the method. Student learns *how it was invented*, not just what it is. |
 
 **Structure every explanation:**
+
 1. **Roadmap first** — "Here's where we're going"
 2. **Intuition before math** — Build the picture, then open the mechanism
 3. **Black-box framing** — What it does, inputs, outputs, before how
@@ -105,6 +111,7 @@ For **ML/AI, quant trading, systems, or any technical domain**, the assistant be
 5. **Practical debugging** — What to watch when it fails
 
 **Style:**
+
 - Short sentences. Bursts, not compound academic sentences.
 - Concrete narrative analogies with specific details.
 - Plain language first, jargon only when earned (explain `token`, `loss`, `attention`, `overfitting`, `Sharpe`, `drawdown`, `alpha` inline).
@@ -136,34 +143,52 @@ Mean Reversion
   ├── Naive: Buy when RSI < 30 → fails in trends
   ├── Bollinger: Statistical bands → better but whipsaws
   ├── Z-Score: Cross-sectional → works for pairs
-  └── Punchline: "Mean reversion isn't a law — it's a bet on stationarity. The backtest tells you if the bet held; the live market tells you if it still holds."
+  └── Punchline: "Mean reversion isn't a law — it's a bet on stationarity. 
+                   The backtest tells you if the bet held; the live market 
+                   tells you if it still holds."
 ```
 
 **Strategy Catalog (taught as evolution, not list):**
 
-| Category | Strategies | Core Problem Each Solves |
-|----------|------------|--------------------------|
-| **Mean Reversion** | Bollinger, RSI Reversal, Z-Score | "Price deviates from fair value" |
-| **Momentum** | Dual Momentum, Low-Vol Momentum, Sector Rotation, Top-N | "Winners keep winning... until they don't" |
-| **Trend** | ATR Trailing Stop, Donchian Breakout, SMA Crossover, Triple MA | "Trend is your friend... until the bend" |
-| **Factor** | Multi-Factor, Quality, Size, Value | "Systematic risk premia, not stock picking" |
-| **Arbitrage** | Basis, Basket StatArb, ETF Premium, Funding Rate, Pairs | "Risk-free-ish profit from mispricing" |
+| Category | Strategies | Core Problem |
+|----------|------------|--------------|
+| **Mean Reversion** | Bollinger, RSI Reversal, Z-Score | Price deviates from fair value |
+| **Momentum** | Dual Momentum, Low-Vol Momentum, Sector Rotation, Top-N | Winners keep winning... until they don't |
+| **Trend** | ATR Trailing Stop, Donchian Breakout, SMA Crossover, Triple MA | Trend is your friend... until the bend |
+| **Factor** | Multi-Factor, Quality, Size, Value | Systematic risk premia, not stock picking |
+| **Arbitrage** | Basis, Basket StatArb, ETF Premium, Funding Rate, Pairs | Risk-free-ish profit from mispricing |
 
-### Quickstart Commands (run from OpenAITrade repo root)
+### Quickstart Commands
+
+Run from OpenAITrade repo root:
 
 ```bash
 # 1. Install
-python -m venv .venv && source .venv/bin/activate && pip install -e ".[dev]"
+python -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+```
 
+```bash
 # 2. Load bundled data
-python -c "from pathlib import Path; import pandas as pd; df=pd.read_csv(Path('data/market_data/spy.csv')); print(df.head(5).to_string(index=False))"
+python -c "from pathlib import Path; import pandas as pd; \
+df=pd.read_csv(Path('data/market_data/spy.csv')); \
+print(df.head(5).to_string(index=False))"
+```
 
+```bash
 # 3. List all strategies
-python -c "from openaitrade.strategies.factory import STRATEGIES; [print(f'{sid:24s} {cls.category:18s} {cls.name}') for sid, cls in STRATEGIES.items()]"
+python -c "from openaitrade.strategies.factory import STRATEGIES; \
+[print(f'{sid:24s} {cls.category:18s} {cls.name}') \
+for sid, cls in STRATEGIES.items()]"
+```
 
+```bash
 # 4. Run quickstart backtest
 python examples/quickstart.py
+```
 
+```bash
 # 5. Validate skill flow
 python -m pytest -q tests/test_skill_installation.py
 ```
@@ -200,23 +225,30 @@ one-mind/
 ## How It Works (Under the Hood)
 
 ### Skill Loading
+
 When you type `/one-mind`:
+
 1. OpenCode reads `commands/one-mind.md`
 2. The command injects the full `SKILL.md` content into the session
 3. The three layers become active behavioral constraints
 4. They remain active until the chat ends
 
 ### Auto-Activation (Optional)
+
 For true always-on behavior, add to `~/.config/opencode/opencode.json`:
+
 ```json
 {
   "plugin": ["~/.config/opencode/node_modules/one-mind"]
 }
 ```
+
 Then create a minimal plugin (see `superpowers` plugin for reference) that injects the skill content into the first user message of every session.
 
 ### Skill Invocation Protocol
+
 The skill enforces a strict protocol:
+
 1. **Check** — Does any skill apply? (even 1%)
 2. **Invoke** — Load via `skill` tool BEFORE responding
 3. **Announce** — "Using [skill] to [purpose]"
@@ -229,7 +261,9 @@ This prevents the "I'll just do this quick thing" anti-pattern.
 ## Customization
 
 ### Adding New Domains
+
 To teach a new domain through Hung-Yi Lee's method:
+
 1. Identify the **core problems** the domain solves
 2. Map the **intuitive approaches** students reach for first
 3. Show where each **hits its limit**
@@ -238,7 +272,9 @@ To teach a new domain through Hung-Yi Lee's method:
 6. Add **practical debugging** — what breaks in practice
 
 ### Modifying Behavior
+
 Edit `skills/one-mind/SKILL.md`:
+
 - **Behavior layer** → Fable 5 section
 - **Process layer** → Superpowers section
 - **Teacher layer** → Hung-Yi Lee section
@@ -298,5 +334,4 @@ git remote add origin https://github.com/<your-username>/one-mind.git
 git push -u origin main
 ```
 
-Then share the repo URL — anyone can install with one clone.#   o n e - m i n d  
- 
+Then share the repo URL — anyone can install with one clone.
