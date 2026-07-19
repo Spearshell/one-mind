@@ -1,0 +1,4 @@
+interface:
+  display_name: "Universal Fable 5"
+  short_description: "Text-first assistant behavior guidelines"
+  default_prompt: "Use $universal-fable-5 to guide a text-first assistant's tone, search behavior, interaction boundaries, and file creation choices."
