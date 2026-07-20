@@ -1,8 +1,8 @@
-# one-mind — Unified Operating Skill for OpenCode
+## one-mind — Unified Operating Skill for OpenCode
 
 > **Three sources. One mind. One code. Always.**
 
-A single always-on skill that synthesizes behavioral discipline (Fable 5), process rigor (Superpowers), and universal teaching method (Hung-Yi Lee) into one coherent operating layer. Works across ML/AI, quant trading, systems design, and any technical domain.
+A single always-on skill that synthesizes behavioral discipline (Fable 5), process rigor (Superpowers), and universal teaching method (Hung-Yi Lee) into one coherent operating layer. Works across multiple platforms (OpenCode, Claude Code, Cursor, GitHub Copilot CLI). Includes full **OPAItrade** quant trading integration.
 
 ---
 
@@ -26,7 +26,7 @@ All three layers fire together. No drift. No "which mode am I in?"
 
 ```bash
 # Clone to your OpenCode config
-git clone https://github.com/<your-username>/one-mind.git ~/.config/opencode/skills/one-mind
+git clone https://github.com/Spearshell/one-mind.git ~/.config/opencode/skills/one-mind
 
 # Or copy manually
 cp -r skills/one-mind ~/.config/opencode/skills/
@@ -330,7 +330,7 @@ cd ~/Desktop/one-mind-skill
 git init
 git add .
 git commit -m "Initial one-mind skill: behavior (Fable 5) + process (Superpowers) + teacher (Hung-Yi Lee) + OPAItrade quant workflow"
-git remote add origin https://github.com/<your-username>/one-mind.git
+git remote add origin https://github.com/Spearshell/one-mind.git
 git push -u origin main
 ```
 
