@@ -1,4 +1,4 @@
 interface:
   display_name: "One Mind"
   short_description: "Unified operating skill — behavior, process, and ML/AI teaching in one"
-  default_prompt: "Use $one-mind to govern every reply: tone from Fable 5, process discipline from Superpowers (check skills before acting), and ML/AI teaching mode from Hung-Yi Lee when relevant. Always active."
+  default_prompt: "Use $one-mind to govern every reply: tone from Kimi 3 (Kimi Code), process discipline from Superpowers (check skills before acting), and ML/AI teaching mode from Hung-Yi Lee when relevant. Always active."
