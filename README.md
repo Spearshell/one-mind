@@ -1,46 +1,54 @@
-## one-mind — Unified Operating Skill v2.1.0
+## one-mind — Unified Operating Skill v2.2.0
 
-> **Three sources. One mind. One code. Always.**
+> **Four sources. One mind. One code. Always.**
 
-A single always-on skill that synthesizes three independent systems into one coherent operating layer:
+A single always-on skill that synthesizes four independent systems into one coherent operating layer:
 
 | Layer | Source | What It Controls | Key Feature |
 |-------|--------|------------------|------------|
-| **Brain** | GLM-5 (Zhipu AI) | Reasoning, planning, agentic protocol | Long-context thinking, tool discipline |
+| **Brain** | Gemini 3.7 (Google DeepMind) | Reasoning, planning, agentic protocol | 2M+ token context, native tool use |
 | **Behavior** | Kimi 3 (MoonshotAI) | Agent capabilities, tool use, interaction style | Capable agent, not passive assistant |
+| **Code Intelligence** | code-review-graph | Token-efficient code reading, impact analysis | 38x–528x token reduction per review |
 | **Domain** | ML2022-Spring | Rigorous reasoning, pedagogical method | Problem-first, empirical validation |
 
-All three fire together. Always. No drift. No "which mode am I in?"
+All four fire together. Always. No drift. No "which mode am I in?"
 
 ---
 
-## 🎯 What's New in v2.1.0
+## 🎯 What's New in v2.2.0
 
-### ✨ Behavior Layer Upgrade: Fable 5 → Kimi 3
-- **Replaced Fable 5** with **Kimi 3 agent guidelines** (from MoonshotAI/kimi-code)
-- **Result:** More capable agentic behavior, stronger tool discipline, proactive initiative
-- **Key changes:**
-  - Be a capable agent, not a passive assistant — take initiative within user intent
-  - Read before write, grep before search — tool use discipline
-  - Batch operations, use native tools, plan before acting
-  - Respond to contested topics with multiple perspectives (not verdicts)
+### ✨ Brain Layer Upgrade: GLM-5 → Gemini 3.7
+- **Upgraded brain** from GLM-5 to **Gemini 3.7** (Google DeepMind)
+- **Result:** Massive context window (2M+ tokens), native multimodal support, superior agentic reasoning
+- **Key capabilities:**
+  - Plan before acting — state goal, list steps, execute, announce changes
+  - Tool discipline — one well-aimed call beats five speculative ones
+  - Long-context strategy — don't summarize; quote whole documents, read code in full
+  - Reasoning transparency — show assumptions → inferences → conclusions
+  - Code as communication — optimize for the next reader
+  - Agentic self-correction — diagnose errors, don't retry blindly
 
-### ✨ Brain Layer Enhancement: GLM-5 Integration
-- **GLM-5 agentic protocol** now the reasoning backbone
-- **1. Plan before acting** — state goal, list steps, then execute
-- **2. Tool discipline** — one well-aimed call beats five speculative ones
-- **3. Long-context strategy** — use GLM's full context window; don't summarize-then-act
-- **4. Reasoning transparency** — show assumptions → inferences → conclusions
-- **5. Code as communication** — optimize for the reader, not the writer
-- **6. Self-correction** — diagnose errors, don't retry blindly
+### ✨ Code Intelligence Layer Restored: code-review-graph
+- **Restored and upgraded** code-review-graph as 4th layer
+- **Result:** Token-efficient code analysis, blast-radius detection, risk-scored reviews
+- **Key features:**
+  - 38x–528x median token reduction across real repositories
+  - Persistent code graph (Tree-sitter → SQLite)
+  - 30 MCP tools for impact analysis, semantic search, architecture overview
+  - Risk-scored diff analysis for PR reviews
+  - Multi-language support (30+ languages including Jupyter notebooks)
+  - GitHub Action for automated, risk-scored PR comments
 
-### ✨ Domain Layer Stability: ML2022 Pedagogy
-- **Problem before method** — state loss, objective, constraints first
-- **Theory-grounded defaults** — every choice has a principle behind it
-- **Bias-variance lens** — evaluate every tradeoff
-- **Sanity checks first** — try the dumb thing before sophistication
-- **Empirical validation** — theory proposes, data disposes
-- **Communicate uncertainty** — confidence intervals, not certainty
+### ✨ Behavior Layer: Kimi 3 Agent Guidelines (Stable)
+- **Kimi 3 agentic behavior** remains the behavioral layer
+- **Golden rule:** Be a capable agent, not a passive assistant
+- Take initiative, read before write, grep before search
+- Batch operations, respect boundaries, multiple perspectives on contested topics
+
+### ✨ Domain Layer: ML2022 Pedagogy (Stable)
+- **ML2022-Spring** rigorous reasoning framework
+- Problem before method, theory-grounded defaults, bias-variance lens
+- Sanity checks first, empirical validation, communicate uncertainty
 
 ---
 
@@ -67,27 +75,29 @@ In any coding assistant chat, load the skill:
 Or activate specific modes:
 
 ```
-/one-mind brain      # Pure GLM reasoning mode (planning, long-context)
+/one-mind brain      # Pure Gemini 3.7 reasoning (planning, long-context, multimodal)
 /one-mind behavior   # Kimi 3 agent capabilities (take initiative, tool discipline)
+/one-mind code       # code-review-graph intelligence (token-efficient code reading)
 /one-mind domain     # ML2022 rigorous reasoning (problem-first, validation)
 ```
 
-All three stay active for the entire session once loaded.
+All four stay active for the entire session once loaded.
 
 ---
 
-## 🧠 The Three Layers
+## 🧠 The Four Layers
 
-### 1. Brain — GLM-5 (How to Think)
+### 1. Brain — Gemini 3.7 (How to Think)
 
 | Principle | What It Means |
 |-----------|--------------|
 | **Plan first** | State goal in one sentence, list steps, then act. Announce mid-execution changes. |
 | **Tool discipline** | Read before write, grep before search. One well-aimed call beats five speculative ones. |
-| **Long-context** | GLM-5 supports massive context. Use it. Don't summarize; quote whole documents. |
+| **Long-context** | Gemini 3.7 supports 2M+ tokens. Use it. Don't summarize; quote whole documents. |
 | **Transparent reasoning** | Show work: "I think X because Y, which implies Z" |
-| **Code as communication** | Optimize for the next reader. Names are docs. Comments explain *why*, not *what*. |
-| **Self-correction** | Read errors, diagnose, then fix. Three identical failures = bug, not persistence. |
+| **Code as communication** | Optimize for the next reader. Names are documentation. Comments explain *why*, not *what*. |
+| **Agentic self-correction** | Read errors, diagnose, then fix. Three identical failures = bug, not persistence. |
+| **Multimodal native** | Process text, images, audio, video, code natively. Use the right modality. |
 
 ### 2. Behavior — Kimi 3 (How to Act)
 
@@ -103,7 +113,34 @@ All three stay active for the entire session once loaded.
 | **Boundaries** | No over-reliance bait. No excessive thanking. No prying. Respect if user wants to end. |
 | **Contested topics** | Multiple perspectives substantively presented — user forms their own judgment. |
 
-### 3. Domain — ML2022-Spring (How to Reason Rigorously)
+### 3. Code Intelligence — code-review-graph (How to Read Code Efficiently)
+
+**The Graph Layer:** Token-efficient, persistent code analysis.
+
+| Capability | What It Does | Example |
+|-----------|--------------|---------|
+| **Persistent graph** | Tree-sitter AST → SQLite (functions, classes, calls, imports, tests) | Build once, query forever |
+| **Minimal context** | 30 MCP tools return only what you need | 38x–528x token reduction |
+| **Impact analysis** | Blast radius: "what does this change affect?" | Change X → affected flows, files, risks |
+| **Risk-scored diffs** | PR reviews with criticality ranking | High risk: hotspots, untested, coupling |
+| **Semantic search** | Find code by name or meaning | `find_callers("validate_input")` |
+| **Architecture overview** | Hub/bridge nodes, community structure | System bottlenecks and integration points |
+| **Multi-language** | 30+ languages including Jupyter/Databricks | Python, JS/TS, Go, Rust, Java, C/C++, … |
+
+**The Pairing:**
+```
+User asks: "Review this PR"
+   ↓
+one-mind + code-review-graph
+   ├─ Activate code-review-graph MCP tools FIRST
+   ├─ Detect changes + get impact radius
+   ├─ Retrieve token-efficient review context
+   └─ Teach explanation using only what matters
+   ↓
+Response: Problem-first, risk-scored, empirically grounded
+```
+
+### 4. Domain — ML2022-Spring (How to Reason Rigorously)
 
 For **ML/AI, quantitative systems, rigorous problem-solving**, the assistant becomes a methodical reasoner:
 
@@ -126,8 +163,9 @@ For **ML/AI, quantitative systems, rigorous problem-solving**, the assistant bec
 When you type `/one-mind`:
 
 1. Your coding assistant reads `skills/one-mind/SKILL.md`
-2. The three layers activate as behavioral constraints
+2. The four layers activate as behavioral constraints
 3. They remain active until the chat ends
+4. Code questions → code-review-graph MCP tools activate first (always-on routing)
 
 ### Operating Posture
 
@@ -135,22 +173,30 @@ On every task:
 
 1. **Brain layer checks** — Plan before acting. Use long context. Show reasoning.
 2. **Behavior layer activates** — Take initiative. Read before write. Respect boundaries.
-3. **Domain layer applies** — Problem first. Theory-grounded. Empirical validation.
+3. **Code layer applies** — For code questions: impact analysis, minimal context, risk scoring.
+4. **Domain layer applies** — Problem first. Theory-grounded. Empirical validation.
 
 ### Mode Routing
 
 ```
 /one-mind brain
   ↓
-GLM agentic protocol activated
+Gemini 3.7 agentic protocol activated
 Planning before action enforced
-Long-context reading for every document
+2M+ token context available
+Multimodal support active
 
 /one-mind behavior
   ↓
 Kimi 3 agent guidelines activated
 Tool discipline: read-grep-batch
 Take initiative within user intent
+
+/one-mind code
+  ↓
+code-review-graph MCP tools activated
+Tree-sitter AST parsing + SQLite graph
+Blast radius, impact, risk scoring
 
 /one-mind domain
   ↓
@@ -161,16 +207,16 @@ Empirical validation required
 
 ---
 
-## 📊 What Changed From v2.0.0
+## 📊 What Changed From v2.1.0
 
-| Component | v2.0.0 | v2.1.0 | Change |
+| Component | v2.1.0 | v2.2.0 | Change |
 |-----------|--------|--------|--------|
-| Behavior Layer | Fable 5 (Anthropic) | Kimi 3 (MoonshotAI) | **Upgraded** — more agentic, proactive |
-| Brain Layer | Not explicit | GLM-5 (Zhipu) | **Added** — reasoning backbone |
-| Domain Layer | Hung-Yi Lee (teaching only) | ML2022 (rigorous reasoning) | **Widened** — applies to all domains |
-| Code Review | code-review-graph (700+ files) | Removed in v2.1.0 | Simplified focus |
-| Quantitative Trading | Full OPAItrade | Removed in v2.1.0 | Focused scope |
-| SKILL.md | 31.9 KB | ~11 KB | **Simplified** — cleaner architecture |
+| Brain Layer | GLM-5 (Zhipu) | Gemini 3.7 (Google) | **Upgraded** — 2M+ tokens, multimodal |
+| Behavior Layer | Kimi 3 (MoonshotAI) | Kimi 3 (MoonshotAI) | **Stable** |
+| Code Intelligence | Removed (v2.1.0) | code-review-graph (restored) | **Restored** — 38x–528x token reduction |
+| Domain Layer | ML2022 (rigorous reasoning) | ML2022 (rigorous reasoning) | **Stable** |
+| SKILL.md | ~11 KB | ~21 KB | **Expanded** — added code layer |
+| Commands | /one-mind brain/behavior/domain | /one-mind brain/behavior/code/domain | **Added** — /one-mind code |
 
 ---
 
@@ -203,13 +249,19 @@ python -c "from pathlib import Path; print(Path('skills/one-mind/SKILL.md').read
 ```
 one-mind/
 ├── SKILL.md                              # Main skill definition
-│   ├── Brain Layer (GLM-5)
+│   ├── Brain Layer (Gemini 3.7)
 │   ├── Behavior Layer (Kimi 3)
+│   ├── Code Intelligence Layer (code-review-graph)
 │   ├── Domain Layer (ML2022)
 │   └── Combined workflow
 ├── skills/
-│   └── one-mind/
-│       └── SKILL.md                      # Detailed skill definition
+│   ├── one-mind/
+│   │   ├── SKILL.md                      # Detailed skill definition
+│   │   └── agents/                       # Agent configurations
+│   └── code-review-graph/                # Code intelligence integration
+├── commands/
+│   ├── one-mind.md                       # one-mind command docs
+│   └── code-review-graph.md              # code review command docs
 ├── README.md                             # This file
 └── LICENSE                               # MIT
 ```
@@ -218,11 +270,12 @@ one-mind/
 
 ## 🛠️ Commands
 
-| Command | Mode | Effect |
-|---------|------|--------|
-| `/one-mind` | All three | Load all layers (default) |
-| `/one-mind brain` | GLM-5 only | Pure reasoning: plan, long-context, self-correct |
+| Command | Layer | Effect |
+|---------|-------|--------|
+| `/one-mind` | All four | Load all layers (default) |
+| `/one-mind brain` | Gemini 3.7 only | Pure reasoning: plan, long-context, multimodal |
 | `/one-mind behavior` | Kimi 3 only | Pure capability: take initiative, tool discipline |
+| `/one-mind code` | code-review-graph only | Token-efficient code reading, impact analysis |
 | `/one-mind domain` | ML2022 only | Pure rigor: problem-first, empirical validation |
 
 All persist for the session.
@@ -231,7 +284,9 @@ All persist for the session.
 
 ## 📚 Documentation
 
-- **`skills/one-mind/SKILL.md`** — Complete skill definition with all three layers
+- **`skills/one-mind/SKILL.md`** — Complete skill definition with all four layers
+- **`commands/one-mind.md`** — one-mind command reference
+- **`commands/code-review-graph.md`** — code-review-graph MCP tools reference
 - **`README.md`** — This file (quick start and overview)
 
 ---
@@ -240,11 +295,15 @@ All persist for the session.
 
 ### To Modify Brain Behavior
 
-Edit `skills/one-mind/SKILL.md` → **Brain Layer — GLM Agentic Protocol** section
+Edit `skills/one-mind/SKILL.md` → **Brain Layer — Gemini 3.7 Agentic Protocol** section
 
 ### To Modify Agent Behavior
 
 Edit `skills/one-mind/SKILL.md` → **Behavior Layer — Kimi 3 Agent Guidelines** section
+
+### To Modify Code Intelligence
+
+Edit `skills/one-mind/SKILL.md` → **Code Intelligence Layer — code-review-graph** section
 
 ### To Add a New Domain
 
@@ -259,20 +318,22 @@ Changes take effect on next `/one-mind` invocation.
 - **Coding Assistant** (Claude Code, OpenAI function-calling, custom framework, etc.)
 - **Python 3.8+** (optional, for local validation only)
 - **Git** (for installation)
+- **code-review-graph** (optional, for code intelligence layer)
 
 ---
 
 ## 🎓 Philosophy
 
-> **Three sources. One mind. One code. Always.**
+> **Four sources. One mind. One code. Always.**
 
-Not a bag of tricks. Not a prompt library. A single coherent operating system for how an AI assistant **thinks** (GLM-5), **acts** (Kimi 3), and **reasons** (ML2022) — across every domain, every chat, every time.
+Not a bag of tricks. Not a prompt library. A single coherent operating system for how an AI assistant **thinks** (Gemini 3.7), **acts** (Kimi 3), **reads code** (code-review-graph), and **reasons** (ML2022) — across every domain, every task, always.
 
-- The **brain layer** keeps you thinking clearly.
+- The **brain layer** keeps you thinking clearly and acting agentic.
 - The **behavior layer** keeps you capable and proactive.
+- The **code layer** keeps your token usage efficient and your insights accurate.
 - The **domain layer** keeps you rigorous and honest.
 
-Three layers. One system. One voice.
+Four layers. One system. One voice.
 
 ---
 
@@ -286,8 +347,9 @@ MIT — use freely, modify freely, teach freely.
 
 | Layer | Source | Credit | Reference |
 |-------|--------|--------|-----------|
-| **Brain** | GLM-5 | Zhipu AI (zai-org) | [GLM-5](https://github.com/zai-org/GLM-5) |
+| **Brain** | Gemini 3.7 | Google DeepMind | [Gemini](https://deepmind.google/technologies/gemini/) |
 | **Behavior** | Kimi 3 | MoonshotAI | [kimi-code](https://github.com/MoonshotAI/kimi-code) |
+| **Code Intelligence** | code-review-graph | tirth8205 | [code-review-graph](https://github.com/tirth8205/code-review-graph) |
 | **Domain** | ML2022-Spring | Hung-Tze Cheng | [ML2022-Spring](https://github.com/virginiakm1988/ML2022-Spring) |
 
 ---
@@ -299,7 +361,7 @@ Issues, PRs, and enhancement ideas welcome.
 ```bash
 cd ~/Desktop/one-mind
 git add .
-git commit -m "one-mind v2.1.0: GLM-5 brain + Kimi 3 behavior + ML2022 domain"
+git commit -m "one-mind v2.2.0: Gemini 3.7 brain + Kimi 3 behavior + code-review-graph intelligence + ML2022 domain"
 git push origin main
 ```
 
@@ -315,12 +377,12 @@ git push origin main
 
 ## 🚀 What's Next
 
-- v2.2.0 (planned): Multi-lingual support for behavior layer
-- v2.3.0 (planned): Integration with code search tools
-- v3.0.0 (planned): Multi-agent coordination
+- v2.3.0 (planned): Multi-language support for behavior layer
+- v2.4.0 (planned): Custom dashboard for code intelligence metrics
+- v3.0.0 (planned): Multi-agent coordination with shared code graph
 
 ---
 
-**Last Updated:** 2026-07-23
+**Last Updated:** 2026-08-27
 
-**Three sources. One mind. One code. Always.**
+**Four sources. One mind. One code. Always.**
