@@ -221,6 +221,20 @@ export class AutonomousLearnerAgent {
     }
   }
 
+  /** Latest nightly replay of the live code (written by backtest-lab\nightly.ps1 after each US close). */
+  _nightlyReport() {
+    try {
+      const f = path.join(envConfig.stateDir, 'nightly-report.json');
+      const m = fs.statSync(f).mtimeMs;
+      if (!this._nightly || this._nightly.m !== m) {
+        const r = JSON.parse(fs.readFileSync(f, 'utf8'));
+        if (this._nightly) this._addNote('NIGHTLY_BACKTEST', `${r.verdict} | ${r.days} days, $${r.realPnlUsd} after costs ($${r.noFxPnlUsd} without FX fee)`);
+        this._nightly = { m, r };
+      }
+      return this._nightly.r;
+    } catch (_) { return null; }
+  }
+
   getStatus() {
     const session = globalMarketRelay.getActiveSession();
     const strategyOverview = inhouseBuilder.getOverview();
@@ -248,6 +262,7 @@ export class AutonomousLearnerAgent {
         features: featureWeights
       },
       synthesizedStrategy: strategyOverview.synthesizedCustomStrategy,
+      nightlyBacktest: this._nightlyReport(),
       recentNotes: this.recentNotes.slice(0, 8),
       lastEvaluatedAt: this.lastEvaluationTs > 0 ? new Date(this.lastEvaluationTs).toLocaleTimeString() : 'Just Now'
     };
