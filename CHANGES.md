@@ -57,3 +57,14 @@ Best version: about +$3 to +$5 over 18 days on $200 after costs (09:45-10:30 + S
 It beats random entries by ~0.5%/trade but not yet with statistical confidence, and the second half is flat. Keep it on paper.
 
 Backups of every earlier version: `Metamask 2026\_backup_2026-11-0*`.
+
+## 2026-11-03 Trading212 order fixes (from real broker rejections in the console)
+
+| Error | Cause | Fix (addons/trading212-live-client.js, platforms/*.js, core/portfolio-manager.js) |
+|---|---|---|
+| quantity-precision-mismatch | 4-decimal quantities | round DOWN to 2 decimals, retry 1 then 0 on that error, remember per ticker |
+| min-opened-position-exceeded (SELL) | sold paper quantity the broker never bought | each position stores brokerQty (what Trading212 really filled); SELL sends exactly that, or stays paper-only |
+| orders silently skipped | 2.2 s spacing rule dropped the second order in a cycle | it now waits its turn |
+
+Tested with a mocked broker: BUY 4.27 rejected, 4.2 accepted, SELL -4.2 sent, sell of a never-filled position not sent.
+Positions bought before this fix (JD, RIVN, BE today) close paper-only; your own practice holdings are never touched.

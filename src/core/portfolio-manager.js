@@ -114,7 +114,8 @@ export class PlatformPortfolio {
     passedBlocks = [],
     volatilityD = 2.5,
     tvVolConfirmed = '4/5',
-    rationale = ''
+    rationale = '',
+    brokerQty = 0
   }) {
     const px = Number(entryPrice);
     const spend = Math.min(Number(notionalUsd), this.state.cashUsd);
@@ -155,6 +156,7 @@ export class PlatformPortfolio {
       unrealizedPnlUsd: 0.00,
       statusHeader: 'Monitoring Structure (+0.00%)',
       rationale,
+      brokerQty: Number(brokerQty) || 0, // shares the Trading212 practice account really bought
       entrySession: usSession(),
       entryTime: new Date().toISOString()
     };

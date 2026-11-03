@@ -96,6 +96,7 @@ export class Trading212VolumeMacroDesk {
           symbol: pos.symbol,
           side: 'SELL',
           notionalUsd: pos.notionalUsd,
+          brokerQty: pos.brokerQty || 0,
           referencePrice: latestPrice
         });
         const closed = this.portfolio.closePosition(
@@ -183,6 +184,7 @@ export class Trading212VolumeMacroDesk {
           });
           const opened = this.portfolio.openPosition({
             symbol: candidate.symbol,
+            brokerQty: liveFill.brokerDispatched ? liveFill.brokerQty : 0,
             name: candidate.name,
             tvSymbol: candidate.tvSymbol,
             exchange: candidate.exchange,

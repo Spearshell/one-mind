@@ -618,55 +618,76 @@ export class Trading212LiveClient {
     return items;
   }
 
-  async executeLiveDemoOrder({ symbol, side = 'BUY', notionalUsd, referencePrice, exchange = 'NASDAQ' }) {
+  /**
+   * Places a market order on the PRACTICE account and reports what really happened at the broker.
+   * Fixes (2026-11-03, from real Trading212 rejections):
+   *  - "quantity-precision-mismatch": quantities are rounded DOWN to the decimals the instrument accepts;
+   *    on that error it retries with fewer decimals (2 -> 1 -> 0) and remembers what worked per ticker.
+   *  - "min-opened-position-exceeded" on SELL: sells now send exactly the quantity the broker actually
+   *    bought (brokerQty). If the buy never reached the broker, the sell stays paper-only.
+   *  - orders inside the 2.2 s spacing used to be skipped silently; now they wait for their turn.
+   */
+  async executeLiveDemoOrder({ symbol, side = 'BUY', notionalUsd, referencePrice, exchange = 'NASDAQ', brokerQty = null }) {
     const liveQuote = await this.fetchLiveExecutionQuote(symbol, exchange);
     const fillPrice = (liveQuote && liveQuote.price > 0) ? liveQuote.price : Number(referencePrice || 0);
     const quantity = fillPrice > 0 ? Number((notionalUsd / fillPrice).toFixed(4)) : 0;
-    const signedQty = side === 'SELL' ? -Math.abs(quantity) : Math.abs(quantity);
     const t212Ticker = this.toT212Ticker(symbol, exchange);
+    this._qtyDecimals = this._qtyDecimals || new Map();
 
     const auth = this._getAuthHeader();
     let brokerOrderId = `T212-GBP-${Date.now().toString(36).toUpperCase()}`;
     let brokerDispatched = false;
+    let brokerFilledQty = 0;
 
     const liveMoneyBlocked = this.activeBaseUrl !== this.demoUrl && !ALLOW_LIVE_MONEY();
     if (auth && liveMoneyBlocked) {
       this._warnOrder(`Order NOT sent: the account answering is the LIVE (real-money) server and ALLOW_LIVE_MONEY_ORDERS is not true. Practice account only.`);
     }
+    // a SELL only goes to the broker for a position the broker really holds
+    const sellPaperOnly = side === 'SELL' && !(Number(brokerQty) > 0);
 
-    if (auth && !liveMoneyBlocked && Math.abs(signedQty) > 0 && (Date.now() - this.lastOrderCallTs) >= this.minOrderIntervalMs) {
-      this.lastOrderCallTs = Date.now();
-      try {
-        const res = await fetch(`${this.activeBaseUrl}/api/v0/equity/orders/market`, {
-          method: 'POST',
-          headers: {
-            'Authorization': auth,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'User-Agent': 'Construct2026/6.2 (Trading212-Exact-Yahoo-Live)'
-          },
-          body: JSON.stringify({
-            quantity: signedQty,
-            ticker: t212Ticker,
-            extendedHours: true
-          }),
-          signal: AbortSignal.timeout(5000)
-        });
-
-        if (res.ok) {
-          const orderData = await res.json();
-          if (orderData && orderData.id) {
-            brokerOrderId = `T212-API-${orderData.id}`;
+    if (auth && !liveMoneyBlocked && !sellPaperOnly && quantity > 0) {
+      const wait = this.minOrderIntervalMs - (Date.now() - this.lastOrderCallTs);
+      if (wait > 0) await new Promise(r => setTimeout(r, wait));
+      const startDec = this._qtyDecimals.get(t212Ticker) ?? 2;
+      for (let dec = startDec; dec >= 0 && !brokerDispatched; dec--) {
+        const f = 10 ** dec;
+        const q = side === 'SELL' ? Number(brokerQty) : Math.floor(quantity * f) / f;
+        if (!(q > 0)) break;
+        this.lastOrderCallTs = Date.now();
+        try {
+          const res = await fetch(`${this.activeBaseUrl}/api/v0/equity/orders/market`, {
+            method: 'POST',
+            headers: {
+              'Authorization': auth,
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'User-Agent': 'Construct2026/6.2 (Trading212-Exact-Yahoo-Live)'
+            },
+            body: JSON.stringify({ quantity: side === 'SELL' ? -q : q, ticker: t212Ticker, extendedHours: true }),
+            signal: AbortSignal.timeout(5000)
+          });
+          if (res.ok) {
+            const orderData = await res.json().catch(() => ({}));
+            brokerOrderId = `T212-API-${orderData?.id ?? 'OK'}`;
             brokerDispatched = true;
+            brokerFilledQty = q;
+            if (side === 'BUY') this._qtyDecimals.set(t212Ticker, dec);
             this.executionStats.t212OrdersDispatched += 1;
+            break;
           }
-        } else {
-          this.executionStats.t212OrdersRejected = (this.executionStats.t212OrdersRejected || 0) + 1;
           const why = await res.text().catch(() => '');
-          this._warnOrder(`${side} ${t212Ticker} not accepted by Trading212 (HTTP ${res.status}): ${String(why).replace(/\s+/g, ' ').slice(0, 180)}`);
+          if (side === 'BUY' && /quantity-precision/i.test(why) && dec > 0) {
+            await new Promise(r => setTimeout(r, this.minOrderIntervalMs));
+            continue; // retry with one decimal fewer
+          }
+          this.executionStats.t212OrdersRejected = (this.executionStats.t212OrdersRejected || 0) + 1;
+          this._warnOrder(`${side} ${q} ${t212Ticker} not accepted by Trading212 (HTTP ${res.status}): ${String(why).replace(/\s+/g, ' ').slice(0, 180)}`);
+          break;
+        } catch (e) {
+          this._warnOrder(`${side} ${t212Ticker} order call failed: ${e.message}`);
+          break;
         }
-      } catch (e) {
-        this._warnOrder(`${side} ${t212Ticker} order call failed: ${e.message}`);
       }
     }
 
@@ -674,6 +695,7 @@ export class Trading212LiveClient {
       ok: true,
       orderId: brokerOrderId,
       brokerDispatched,
+      brokerQty: brokerFilledQty,
       symbol,
       yahooSymbol: liveQuote?.yahooSymbol || this.toYahooSymbol(symbol, exchange),
       t212Ticker,
