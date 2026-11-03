@@ -68,3 +68,20 @@ Backups of every earlier version: `Metamask 2026\_backup_2026-11-0*`.
 
 Tested with a mocked broker: BUY 4.27 rejected, 4.2 accepted, SELL -4.2 sent, sell of a never-filled position not sent.
 Positions bought before this fix (JD, RIVN, BE today) close paper-only; your own practice holdings are never touched.
+
+## 2026-11-03 night: VIX filter tested, NOT adopted
+
+Idea (from the volatility-smile video): don't buy while the fear gauge (VIX) is rising. Tested on the live code with
+`T212_VIX_FILTER=<pct>` = block new buys while VIX is up more than <pct>% on the day (on top of the SPY filter).
+Replay Oct 8 - Nov 3 (19 days), real Trading212 costs, $200 start, 3 seeds:
+
+| VIX limit | seed 20261102 | seed 11 | seed 23 |
+|---|---|---|---|
+| off (current live rules) | +$2.93 | +$3.19 | +$4.78 |
+| 0% | +$3.59 | +$1.02 | +$1.47 |
+| 3% | +$3.59 | +$1.02 | +$2.47 |
+| 5% | +$2.93 | +$3.19 | +$4.78 (never triggers) |
+
+Worse on 2 of 3 seeds at 0% and 3%, no effect at 5%. The SPY filter (SPY up and above VWAP) already keeps the bot out on
+most rising-fear days, so VIX adds nothing. Live code unchanged. The test code stays in backtest-lab\src-vix
+(`vix-test.ps1`, `fetch-vix.mjs`); VIX history is now saved nightly with the other index data.
