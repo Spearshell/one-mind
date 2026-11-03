@@ -1,0 +1,15 @@
+{
+  "name": "live-demo-main-project",
+  "version": "4.0.0",
+  "description": "Unified S-Tier / T-Tier / A-Tier Autonomous Live Demo Construct: Trading212 ($100) + MetaMask 1inch Aqua DEX ($100) with TradingView & Gemini AI",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "reset": "node src/core/reset-portfolios.js",
+    "audit": "node src/core/verify-construct.js"
+  },
+  "dependencies": {
+    "ethers": "^6.13.4"
+  }
+}
