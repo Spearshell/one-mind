@@ -73,11 +73,11 @@ import globalMarketRelay from './global-market-relay.js';
 const toMin = (hhmm) => { const [h, m] = String(hhmm).split(':').map(Number); return h * 60 + (m || 0); };
 
 export function entryWindow() {
-  const raw = String(process.env.T212_ENTRY_WINDOW_ET || '09:45-12:00').trim().toLowerCase();
+  const raw = String(process.env.T212_ENTRY_WINDOW_ET || '09:45-10:30').trim().toLowerCase();
   if (['off', 'false', 'any', '24/5', '24/7', 'global', 'none'].includes(raw)) return null;
   const [a, b] = raw.split('-');
   const from = toMin(a), to = toMin(b);
-  if (!Number.isFinite(from) || !Number.isFinite(to)) return { from: 585, to: 720, label: '09:45-12:00' };
+  if (!Number.isFinite(from) || !Number.isFinite(to)) return { from: 585, to: 630, label: '09:45-10:30' };
   return { from, to, label: raw };
 }
 

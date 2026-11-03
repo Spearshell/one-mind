@@ -17,7 +17,7 @@ Takes ~2 minutes. Open `results\my-check-trades.csv` in Excel to see every trade
 
 | # | File | Change | Replay result | Undo in `.env` |
 |---|---|---|---|---|
-| 1 | core/market-hours.js | Buy only 09:45-12:00 New York time | as originally running: -$112 -> -$7.67 together with 2-5 | `T212_ENTRY_WINDOW_ET=global` |
+| 1 | core/market-hours.js | Buy only 09:45-10:30 New York time (was 09:45-12:00 until 2026-11-03) | as originally running: -$112 -> -$7.67 together with 2-5 | `T212_ENTRY_WINDOW_ET=global` |
 | 2 | core/market-hours.js, core/smart-chart-exit.js | Sell everything 5 min before the US close | part of the above; 24/7 + no close-out = -$62 | `T212_FLAT_BEFORE_CLOSE=false` |
 | 3 | core/tier-classifier.js | Stops 1.5-4% scaled to the stock's volatility (was max 1.65%) | tighter 0.35x stop -$38, 0.5x -$27, 0.8x -$21 | `T212_WIDE_STOPS=false` |
 | 4 | core/smart-chart-exit.js | Break-even "rotation" exit and -0.65% "support break" exit off | -$26.8 -> -$8.6 | `T212_ANTI_STAGNATION_EXIT=true`, `T212_SUPPORT_BREAK_EXIT=true` |
@@ -36,8 +36,24 @@ Tested and rejected: anti-chase (skip >10% movers) -$16.40; only 3/5/8%+ movers 
 VWAP-extension cap -$7.34; Stockbee 4% breakout swing (2 years daily, 2,238 trades) +0.45%/trade vs +0.43% for
 buying the same stocks on any random day = no edge.
 
+## 2026-11-03 research round (18 days, SPY filter on, 3 random seeds)
+
+| Buy window | Result after costs (seeds 1 / 7 / 99) | Worst drop | 1st half / 2nd half (seed 1) |
+|---|---|---|---|
+| 09:45-12:00 (old) | -2.01 / -8.55 / - | 6.9 / 11.8 | -0.95 / -1.06 |
+| **09:45-10:30 (new default)** | **+4.96 / +3.19 / +5.35** | 2.1 / 3.5 / 2.1 | +5.40 / -0.44 |
+| 09:45-11:00 | +2.56 / -2.94 / +4.14 | 5.1 / 6.0 / 4.7 | +1.77 / +0.79 |
+| 09:45-10:30 without SPY filter | -8.18 | 10.3 | -2.97 / -5.21 |
+| max 1 / 2 positions per desk | -4.76 / -1.63 | | |
+| wider stops (0.8x, max 6%) | -1.57 | | |
+
+Versus buying the same stock at a random time the same day, held as long (after costs):
+old window -0.54%/trade, 09:45-10:30 +0.48%/trade, 09:45-11:00 +0.31%/trade (standard error ~0.37, so not yet
+statistically proven). About 2 trades a day. The nightly backtest keeps checking it as days are added.
+Reproduce: `$env:SRC="src-r"; $env:T212_ENTRY_WINDOW_ET="09:45-10:30"; node replay.mjs`, random check: `backtest-lab\randbase.py`.
+
 ## Honest status
-Best version: about -$2 over 17 days on $200 after costs, about +$2.5 without the currency fee.
-No version has yet beaten "buy the same stocks on a random day" in both halves of the test. Keep it on paper.
+Best version: about +$3 to +$5 over 18 days on $200 after costs (09:45-10:30 + SPY filter), first real positive result, still a small sample.
+It beats random entries by ~0.5%/trade but not yet with statistical confidence, and the second half is flat. Keep it on paper.
 
 Backups of every earlier version: `Metamask 2026\_backup_2026-11-0*`.
