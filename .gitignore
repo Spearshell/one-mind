@@ -8,3 +8,6 @@ state/
 node_modules/
 logs/
 *.log
+# Added by code-review-graph
+.code-review-graph/
+.mcp.json
